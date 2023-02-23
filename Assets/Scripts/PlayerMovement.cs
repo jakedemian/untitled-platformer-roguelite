@@ -26,8 +26,8 @@ public class PlayerMovement : MonoBehaviour {
 
 
         if (HasInput(hInput)) {
-            var movement = new Vector2(hInput, 0f);
-            var hit = Physics2D.BoxCast(boxCollider.bounds.center,
+            Vector2 movement = new Vector2(hInput, 0f);
+            RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center,
                 new Vector2(boxCollider.bounds.size.x, boxCollider.bounds.size.y - 0.1f), 0f, movement, 0.1f,
                 layermask);
             if (hit.collider == null) {
@@ -69,23 +69,23 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void UpdateGroundedState() {
-        var colliderBounds = boxCollider.bounds;
+        Bounds colliderBounds = boxCollider.bounds;
 
         // TODO these raycasts need to come from the player center and stretch out to slightly below the player min y
         //  to avoid phasing through floors at high speeds
-        var bottomLeft = new Vector2(colliderBounds.min.x, colliderBounds.min.y);
-        var bottomRight = new Vector2(colliderBounds.max.x, colliderBounds.min.y);
+        Vector2 bottomLeft = new Vector2(colliderBounds.min.x, colliderBounds.min.y);
+        Vector2 bottomRight = new Vector2(colliderBounds.max.x, colliderBounds.min.y);
 
 
         var raycastLength = 0.1f;
 
-        var hitLeft = Physics2D.Raycast(bottomLeft, Vector2.down, raycastLength, layermask);
-        var hitRight = Physics2D.Raycast(bottomRight, Vector2.down, raycastLength, layermask);
+        RaycastHit2D hitLeft = Physics2D.Raycast(bottomLeft, Vector2.down, raycastLength, layermask);
+        RaycastHit2D hitRight = Physics2D.Raycast(bottomRight, Vector2.down, raycastLength, layermask);
 
 
         if (hitLeft.collider != null || hitRight.collider != null) {
             if (!isGrounded) {
-                var hit = hitLeft.collider == null ? hitRight : hitLeft;
+                RaycastHit2D hit = hitLeft.collider == null ? hitRight : hitLeft;
                 SnapPlayerToGround(hit);
             }
 
@@ -101,7 +101,7 @@ public class PlayerMovement : MonoBehaviour {
             return;
         }
 
-        var colliderBounds = boxCollider.bounds;
+        Bounds colliderBounds = boxCollider.bounds;
         var distFromGround = colliderBounds.min.y - hit.point.y;
 
         transform.position = new Vector2(transform.position.x, transform.position.y - distFromGround);
@@ -109,16 +109,16 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void CheckCeilingBump() {
-        var colliderBounds = boxCollider.bounds;
+        Bounds colliderBounds = boxCollider.bounds;
 
-        var topLeft = new Vector2(colliderBounds.min.x, colliderBounds.max.y);
-        var topRight = new Vector2(colliderBounds.max.x, colliderBounds.max.y);
+        Vector2 topLeft = new Vector2(colliderBounds.min.x, colliderBounds.max.y);
+        Vector2 topRight = new Vector2(colliderBounds.max.x, colliderBounds.max.y);
 
 
         var raycastLength = 0.1f;
 
-        var hitLeft = Physics2D.Raycast(topLeft, Vector2.up, raycastLength, layermask);
-        var hitRight = Physics2D.Raycast(topRight, Vector2.up, raycastLength, layermask);
+        RaycastHit2D hitLeft = Physics2D.Raycast(topLeft, Vector2.up, raycastLength, layermask);
+        RaycastHit2D hitRight = Physics2D.Raycast(topRight, Vector2.up, raycastLength, layermask);
 
 
         if ((hitLeft.collider != null || hitRight.collider != null) && rb.velocity.y > 0) {
