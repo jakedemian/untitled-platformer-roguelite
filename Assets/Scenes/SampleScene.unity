@@ -275,8 +275,10 @@ MonoBehaviour:
     m_Bits: 64
   moveSpeed: 4
   moveSpeedFalloffFactor: 30
-  jumpSpeed: 250
-  ceilingBumpSpeedReduction: 0.5
+  jumpSpeed: 400
+  gravityOnAscent: 1.5
+  gravityOnDescent: 2.5
+  ceilingBumpSpeedReduction: 0.35
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

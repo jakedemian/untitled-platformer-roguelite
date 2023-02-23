@@ -5,6 +5,8 @@ public class PlayerMovement : MonoBehaviour {
     public float moveSpeed;
     public float moveSpeedFalloffFactor;
     public float jumpSpeed;
+    public float gravityOnAscent;
+    public float gravityOnDescent;
 
     [Range(0f, 1f)] public float ceilingBumpSpeedReduction;
     // TODO preJumpLeniencyTime = 0.2f;
@@ -122,7 +124,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
         if ((hitLeft.collider != null || hitRight.collider != null) && rb.velocity.y > 0) {
-            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y / ceilingBumpSpeedReduction);
+            rb.velocity = new Vector2(rb.velocity.x, -rb.velocity.y * ceilingBumpSpeedReduction);
         }
     }
 
@@ -150,8 +152,13 @@ public class PlayerMovement : MonoBehaviour {
         if (isGrounded && rb.gravityScale > 0) {
             rb.gravityScale = 0f;
         }
-        else if (!isGrounded && Mathf.Approximately(rb.gravityScale, 0f)) {
-            rb.gravityScale = 1f;
+        else if (!isGrounded) {
+            if (rb.velocity.y > 0) {
+                rb.gravityScale = gravityOnAscent;
+            }
+            else {
+                rb.gravityScale = gravityOnDescent;
+            }
         }
     }
 }
