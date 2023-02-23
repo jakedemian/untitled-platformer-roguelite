@@ -7,12 +7,12 @@ public class PlayerMovement : MonoBehaviour {
     public float jumpSpeed;
     public float gravityOnAscent;
     public float gravityOnDescent;
-
+    public float preJumpLeniencyTime;
     [Range(0f, 1f)] public float ceilingBumpSpeedReduction;
-    // TODO preJumpLeniencyTime = 0.2f;
 
     private BoxCollider2D boxCollider;
     private bool isGrounded;
+    private float jumpQueueTimer;
     private Rigidbody2D rb;
     private Vector2 velocity;
 
@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour {
 
     private void Update() {
         var hInput = Input.GetAxisRaw("Horizontal");
-        var jumpInput = Input.GetButtonDown("Jump");
+        UpdateJumpQueueTimer();
+
         UpdateGroundedState();
 
 
@@ -47,7 +48,8 @@ public class PlayerMovement : MonoBehaviour {
         // TODO max y velocity
         rb.velocity = new Vector2(velocity.x, rb.velocity.y);
 
-        if (jumpInput && isGrounded) {
+        if (IsJumpQueued() && isGrounded) {
+            ResetJumpQueueTimer();
             rb.AddForce(Vector2.up * jumpSpeed);
             isGrounded = false;
         }
@@ -160,5 +162,31 @@ public class PlayerMovement : MonoBehaviour {
                 rb.gravityScale = gravityOnDescent;
             }
         }
+    }
+
+    private void UpdateJumpQueueTimer() {
+        if (Input.GetButtonDown("Jump")) {
+            QueueJump();
+        }
+
+        if (jumpQueueTimer > 0f) {
+            jumpQueueTimer -= Time.deltaTime;
+        }
+
+        if (jumpQueueTimer <= 0f) {
+            ResetJumpQueueTimer();
+        }
+    }
+
+    private void ResetJumpQueueTimer() {
+        jumpQueueTimer = 0f;
+    }
+
+    private void QueueJump() {
+        jumpQueueTimer = preJumpLeniencyTime;
+    }
+
+    private bool IsJumpQueued() {
+        return jumpQueueTimer > 0f;
     }
 }
