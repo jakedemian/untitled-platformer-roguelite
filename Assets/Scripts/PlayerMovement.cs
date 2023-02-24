@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour {
     public float moveSpeedFalloffFactor;
     public float jumpSpeed;
     public float gravityOnAscent;
+    public float gravityOnAscentWhildHoldingJump;
     public float gravityOnDescent;
     public float preJumpLeniencyTime;
     [Range(0f, 1f)] public float ceilingBumpSpeedReduction;
@@ -21,7 +22,6 @@ public class PlayerMovement : MonoBehaviour {
 
     // TODO coyote timer
     // TODO "almost made it up the ledge" forgiveness
-    // TODO holding spacebar for a jump gives lower gravity on way up
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -165,7 +165,7 @@ public class PlayerMovement : MonoBehaviour {
         }
         else if (!isGrounded) {
             if (rb.velocity.y > 0) {
-                rb.gravityScale = gravityOnAscent;
+                rb.gravityScale = Input.GetButton("Jump") ? gravityOnAscentWhildHoldingJump : gravityOnAscent;
             }
             else {
                 rb.gravityScale = gravityOnDescent;

@@ -185,7 +185,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -277,13 +277,15 @@ MonoBehaviour:
     m_Bits: 64
   moveSpeed: 4
   moveSpeedFalloffFactor: 30
-  jumpSpeed: 500
-  gravityOnAscent: 3
+  jumpSpeed: 10
+  gravityOnAscent: 5
+  gravityOnAscentWhildHoldingJump: 2.5
   gravityOnDescent: 4
   preJumpLeniencyTime: 0.2
   ceilingBumpSpeedReduction: 0.35
   groundedCheckDistance: 0.25
   maxVSpeed: 25
+  preventGroundSnapVspeed: 3
 --- !u!114 &81508049
 MonoBehaviour:
   m_ObjectHideFlags: 0
