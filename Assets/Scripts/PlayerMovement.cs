@@ -9,6 +9,10 @@ public class PlayerMovement : MonoBehaviour {
     public float gravityOnDescent;
     public float preJumpLeniencyTime;
     [Range(0f, 1f)] public float ceilingBumpSpeedReduction;
+    public float groundedCheckDistance;
+    public float maxVSpeed;
+
+    private float _temp_maxVSpeed;
 
     private BoxCollider2D boxCollider;
     private bool isGrounded;
@@ -46,16 +50,25 @@ public class PlayerMovement : MonoBehaviour {
 
         CheckCeilingBump();
         // TODO max y velocity
-        rb.velocity = new Vector2(velocity.x, rb.velocity.y);
+        rb.velocity = new Vector2(velocity.x, Mathf.Clamp(rb.velocity.y, -maxVSpeed, maxVSpeed));
+
 
         if (IsJumpQueued() && isGrounded) {
             ResetJumpQueueTimer();
             rb.AddForce(Vector2.up * jumpSpeed);
             isGrounded = false;
         }
+
+        UpdateContextualGravity();
     }
 
     private void LateUpdate() {
+        UpdateSpriteDirection();
+        _temp_maxVSpeed = Mathf.Max(_temp_maxVSpeed, Mathf.Abs(rb.velocity.y));
+        Debug.Log(_temp_maxVSpeed);
+    }
+
+    private void UpdateSpriteDirection() {
         float newLocalX;
         if (rb.velocity.x < 0) {
             newLocalX = -1f;
@@ -68,8 +81,6 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         transform.localScale = new Vector3(newLocalX, 1, 1);
-
-        UpdateGravity();
     }
 
     private void UpdateGroundedState() {
@@ -81,10 +92,8 @@ public class PlayerMovement : MonoBehaviour {
         Vector2 bottomRight = new Vector2(colliderBounds.max.x, colliderBounds.min.y);
 
 
-        var raycastLength = 0.1f;
-
-        RaycastHit2D hitLeft = Physics2D.Raycast(bottomLeft, Vector2.down, raycastLength, layermask);
-        RaycastHit2D hitRight = Physics2D.Raycast(bottomRight, Vector2.down, raycastLength, layermask);
+        RaycastHit2D hitLeft = Physics2D.Raycast(bottomLeft, Vector2.down, groundedCheckDistance, layermask);
+        RaycastHit2D hitRight = Physics2D.Raycast(bottomRight, Vector2.down, groundedCheckDistance, layermask);
 
 
         if (hitLeft.collider != null || hitRight.collider != null) {
@@ -150,7 +159,7 @@ public class PlayerMovement : MonoBehaviour {
         return newValue;
     }
 
-    private void UpdateGravity() {
+    private void UpdateContextualGravity() {
         if (isGrounded && rb.gravityScale > 0) {
             rb.gravityScale = 0f;
         }
@@ -188,5 +197,9 @@ public class PlayerMovement : MonoBehaviour {
 
     private bool IsJumpQueued() {
         return jumpQueueTimer > 0f;
+    }
+
+    public bool IsGrounded() {
+        return isGrounded;
     }
 }
