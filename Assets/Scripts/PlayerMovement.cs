@@ -11,14 +11,17 @@ public class PlayerMovement : MonoBehaviour {
     [Range(0f, 1f)] public float ceilingBumpSpeedReduction;
     public float groundedCheckDistance;
     public float maxVSpeed;
-
-    private float _temp_maxVSpeed;
+    public float preventGroundSnapVspeed;
 
     private BoxCollider2D boxCollider;
     private bool isGrounded;
     private float jumpQueueTimer;
     private Rigidbody2D rb;
     private Vector2 velocity;
+
+    // TODO coyote timer
+    // TODO "almost made it up the ledge" forgiveness
+    // TODO holding spacebar for a jump gives lower gravity on way up
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();
@@ -28,9 +31,7 @@ public class PlayerMovement : MonoBehaviour {
     private void Update() {
         var hInput = Input.GetAxisRaw("Horizontal");
         UpdateJumpQueueTimer();
-
         UpdateGroundedState();
-
 
         if (HasInput(hInput)) {
             Vector2 movement = new Vector2(hInput, 0f);
@@ -49,13 +50,13 @@ public class PlayerMovement : MonoBehaviour {
         }
 
         CheckCeilingBump();
-        // TODO max y velocity
         rb.velocity = new Vector2(velocity.x, Mathf.Clamp(rb.velocity.y, -maxVSpeed, maxVSpeed));
 
 
         if (IsJumpQueued() && isGrounded) {
             ResetJumpQueueTimer();
-            rb.AddForce(Vector2.up * jumpSpeed);
+            // rb.AddForce(Vector2.up * jumpSpeed);
+            rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             isGrounded = false;
         }
 
@@ -64,8 +65,6 @@ public class PlayerMovement : MonoBehaviour {
 
     private void LateUpdate() {
         UpdateSpriteDirection();
-        _temp_maxVSpeed = Mathf.Max(_temp_maxVSpeed, Mathf.Abs(rb.velocity.y));
-        Debug.Log(_temp_maxVSpeed);
     }
 
     private void UpdateSpriteDirection() {
@@ -100,6 +99,7 @@ public class PlayerMovement : MonoBehaviour {
             if (!isGrounded) {
                 RaycastHit2D hit = hitLeft.collider == null ? hitRight : hitLeft;
                 SnapPlayerToGround(hit);
+                Debug.Log($"v_velocity:  {rb.velocity.y}");
             }
 
             isGrounded = true;
@@ -110,7 +110,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void SnapPlayerToGround(RaycastHit2D hit) {
-        if (rb.velocity.y >= 0f) {
+        if (rb.velocity.y >= preventGroundSnapVspeed) {
             return;
         }
 

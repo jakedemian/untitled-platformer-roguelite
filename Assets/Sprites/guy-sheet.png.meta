@@ -305,6 +305,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: guy-sheet_9
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e947bb7921139264492347843e28168e
+      internalID: -1412058445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -320,6 +341,7 @@ TextureImporter:
       guy-sheet_3: 1659708173
       guy-sheet_5: -1678370665
       guy-sheet_4: -1679409795
+      guy-sheet_9: -1412058445
       guy-sheet_2: -382421180
       guy-sheet_7: 876457095
       guy-sheet_6: -1606780947
