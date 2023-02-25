@@ -55,9 +55,9 @@ public class PlayerMovement : MonoBehaviour {
 
         if (IsJumpQueued() && isGrounded) {
             ResetJumpQueueTimer();
-            // rb.AddForce(Vector2.up * jumpSpeed);
             rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
             isGrounded = false;
+            PlayerEvents.instance.e_PlayerJump();
         }
 
         UpdateContextualGravity();
@@ -111,6 +111,7 @@ public class PlayerMovement : MonoBehaviour {
 
     private void SnapPlayerToGround(RaycastHit2D hit) {
         if (rb.velocity.y >= preventGroundSnapVspeed) {
+            // FIXME this logic is why i get an animation stutter when barely clearing a jump
             return;
         }
 
@@ -119,6 +120,7 @@ public class PlayerMovement : MonoBehaviour {
 
         transform.position = new Vector2(transform.position.x, transform.position.y - distFromGround);
         rb.velocity = new Vector2(rb.velocity.x, 0f);
+        PlayerEvents.instance.e_PlayerLand();
     }
 
     private void CheckCeilingBump() {
