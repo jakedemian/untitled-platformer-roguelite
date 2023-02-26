@@ -1,13 +1,12 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class PlayerSound : MonoBehaviour {
     public AudioClip jump;
     public AudioClip land;
     public AudioClip step;
 
-    [FormerlySerializedAs("jumpVariation")]
     public float jumpPitchVariation;
+    public float landPitchVariation;
 
     private void Awake() {
         PlayerEvents.instance.onPlayerJump += OnPlayerJump;
@@ -19,6 +18,6 @@ public class PlayerSound : MonoBehaviour {
     }
 
     private void OnPlayerLand() {
-        AudioController.instance.PlaySoundVaryPitch(land, jumpPitchVariation);
+        AudioController.instance.PlaySoundVaryPitch(land, landPitchVariation);
     }
 }

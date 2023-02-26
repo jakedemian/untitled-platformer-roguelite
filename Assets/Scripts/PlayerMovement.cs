@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour {
 
     // TODO coyote timer
     // TODO "almost made it up the ledge" forgiveness
+    // TODO bug: jump down to lowest level and jump while standing
+    //      still in diff spots. you'll glitch out when landing sometimes
 
     private void Awake() {
         rb = GetComponent<Rigidbody2D>();

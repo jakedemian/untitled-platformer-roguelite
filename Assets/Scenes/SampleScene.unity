@@ -344,10 +344,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c839297aa24dc234d8fbd7b26176291f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jump: {fileID: 8300000, guid: a4d2b77122962104da5fbd48c479cc9b, type: 3}
-  land: {fileID: 8300000, guid: 760afa4bf70105f4ba6678e126345f87, type: 3}
+  jump: {fileID: 8300000, guid: 6153dbdbcc5ff6e4e808af442ef9c339, type: 3}
+  land: {fileID: 8300000, guid: e46050a1cdc97e84b9a89abb19693ae4, type: 3}
   step: {fileID: 0}
   jumpPitchVariation: 0.2
+  landPitchVariation: 0.4
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
