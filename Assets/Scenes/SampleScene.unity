@@ -346,9 +346,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jump: {fileID: 8300000, guid: 6153dbdbcc5ff6e4e808af442ef9c339, type: 3}
   land: {fileID: 8300000, guid: e46050a1cdc97e84b9a89abb19693ae4, type: 3}
-  step: {fileID: 0}
+  step: {fileID: 8300000, guid: 814a6ea89b8fdb14fa7e69a0f828c7b6, type: 3}
+  stepLoopTime: 0.2
   jumpPitchVariation: 0.2
   landPitchVariation: 0.4
+  stepPitchVariation: 0.2
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
